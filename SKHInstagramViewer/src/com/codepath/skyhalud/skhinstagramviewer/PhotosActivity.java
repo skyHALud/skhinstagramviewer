@@ -107,8 +107,8 @@ public class PhotosActivity extends Activity {
 						if(photoJSON.get("location") != JSONObject.NULL) {
 							JSONObject locationObj = photoJSON.getJSONObject("location");
 							photo.locationName = locationObj.has("name") ? locationObj.getString("name") : null;
-							photo.locationLatitude = locationObj.has("latitude") ? locationObj.getDouble("latitude") : null;
-							photo.locationLongitude = locationObj.has("longitude") ? locationObj.getDouble("longitude") : null;
+							photo.locationLatitude = locationObj.has("latitude") ? locationObj.getDouble("latitude") : 0;
+							photo.locationLongitude = locationObj.has("longitude") ? locationObj.getDouble("longitude") : 0;
 						}
 						
 						photos.add(photo);

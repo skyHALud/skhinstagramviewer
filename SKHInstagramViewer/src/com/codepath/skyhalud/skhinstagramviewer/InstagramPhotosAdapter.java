@@ -18,6 +18,8 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
 public class InstagramPhotosAdapter extends ArrayAdapter<InstagramPhoto> {
+	private static final String MAP_SYMBOL_PREFIX = "&raquo; ";
+
 	public InstagramPhotosAdapter(Context context, ArrayList<InstagramPhoto> photos) {
 		super(context, R.layout.item_photo, photos);
 	}
@@ -33,7 +35,7 @@ public class InstagramPhotosAdapter extends ArrayAdapter<InstagramPhoto> {
 		TextView tvCaption = (TextView) convertView.findViewById(R.id.tvCaption);
 		ImageView imgPhoto = (ImageView) convertView.findViewById(R.id.imgPhoto);
 		
-		tvCaption.setText(Html.fromHtml("&hearts;" + photo.likesCount + " likes<br/><br/>" + StringUtils.trimToEmpty(photo.caption)));
+		tvCaption.setText(Html.fromHtml("&#x2661; " + photo.likesCount + " likes<br/><br/>" + StringUtils.trimToEmpty(photo.caption)));
 		imgPhoto.getLayoutParams().height = photo.imageHeight;
 		imgPhoto.setImageResource(0);// clear any previous image
 		
@@ -42,6 +44,9 @@ public class InstagramPhotosAdapter extends ArrayAdapter<InstagramPhoto> {
 		
 		final ImageView imgProfilePicture = (ImageView) convertView.findViewById(R.id.imgProfilePicture);
 		TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
+		TextView tvPhotoLocation = (TextView) convertView.findViewById(R.id.tvPhotoLocation);
+		
+		tvPhotoLocation.setText(buildMapLinkText(photo));
 		
 		Transformation transformation = new Transformation() {
 
@@ -68,6 +73,16 @@ public class InstagramPhotosAdapter extends ArrayAdapter<InstagramPhoto> {
 		tvUserName.setText(Html.fromHtml("<b>" + photo.username + "</b>"));
 		
 		return convertView;
+	}
+
+	private CharSequence buildMapLinkText(InstagramPhoto photo) {
+		if(photo.locationName != null) {
+			return Html.fromHtml(MAP_SYMBOL_PREFIX + photo.locationName);
+		} else
+		if(photo.locationLatitude != 0 && photo.locationLatitude != 0) {
+			return Html.fromHtml(MAP_SYMBOL_PREFIX + "map"); // TODO Add link
+		}
+		else return "";
 	}
 	
 }
