@@ -59,7 +59,7 @@ public class PhotosActivity extends Activity {
 					
 					for(int i=0;i<photosJSON.length();i++) {
 						JSONObject photoJSON = photosJSON.getJSONObject(i);
-						JSONObject caption = photoJSON.has("caption") ? photoJSON.getJSONObject("caption") : null;
+						JSONObject caption = photoJSON.get("caption") != JSONObject.NULL ? photoJSON.getJSONObject("caption") : null;
 						InstagramPhoto photo = new InstagramPhoto(
 								photoJSON.getJSONObject("user").getString("username"),
 								caption != null ? caption.getString("text") : null,
