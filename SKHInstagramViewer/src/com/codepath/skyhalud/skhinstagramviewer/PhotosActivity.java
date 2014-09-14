@@ -93,13 +93,23 @@ public class PhotosActivity extends Activity {
 					for(int i=0;i<photosJSON.length();i++) {
 						JSONObject photoJSON = photosJSON.getJSONObject(i);
 						JSONObject caption = photoJSON.get("caption") != JSONObject.NULL ? photoJSON.getJSONObject("caption") : null;
+						JSONObject userObject = photoJSON.getJSONObject("user");
 						InstagramPhoto photo = new InstagramPhoto(
-								photoJSON.getJSONObject("user").getString("username"),
+								userObject.getString("username"),
 								caption != null ? caption.getString("text") : null,
 								photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getString("url"),
 								photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getInt("height"),
 								photoJSON.getJSONObject("likes").getInt("count")
 								);
+						
+						photo.profilePicture = userObject.getString("profile_picture");
+						
+						if(photoJSON.get("location") != JSONObject.NULL) {
+							JSONObject locationObj = photoJSON.getJSONObject("location");
+							photo.locationName = locationObj.has("name") ? locationObj.getString("name") : null;
+							photo.locationLatitude = locationObj.getDouble("latitude");
+							photo.locationLongitude = locationObj.getDouble("longitude");
+						}
 						
 						photos.add(photo);
 					}
