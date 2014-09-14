@@ -29,7 +29,7 @@ public class InstagramPhotosAdapter extends ArrayAdapter<InstagramPhoto> {
 		TextView tvCaption = (TextView) convertView.findViewById(R.id.tvCaption);
 		ImageView imgPhoto = (ImageView) convertView.findViewById(R.id.imgPhoto);
 		
-		tvCaption.setText(Html.fromHtml("<b>" + photo.username + "</b> - " + photo.caption));
+		tvCaption.setText(Html.fromHtml("&hearts;" + photo.likesCount + " likes<br/><br/>" + "<b>" + photo.username + "</b> - " + photo.caption));
 		imgPhoto.getLayoutParams().height = photo.imageHeight;
 		imgPhoto.setImageResource(0);// clear any previous image
 		
