@@ -1,6 +1,7 @@
 package com.codepath.skyhalud.skhinstagramviewer;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -44,7 +46,10 @@ public class PhotosActivity extends Activity {
     	ListView lvPhotos = (ListView) findViewById(R.id.lvPhotos);
     	lvPhotos.setAdapter(aPhotos);
     	
+    	Toast.makeText(PhotosActivity.this.getBaseContext(), "Loading photos...", Toast.LENGTH_LONG).show();
+    	
     	AsyncHttpClient ahc = new AsyncHttpClient();
+    	ahc.setTimeout((int) TimeUnit.SECONDS.toMillis(5));
     	ahc.get(popularUrl, new JsonHttpResponseHandler() {
 
 			@Override public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -78,10 +83,30 @@ public class PhotosActivity extends Activity {
 			}
     		
 			@Override
-			public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONArray errorResponse) {
 				// TODO Auto-generated method stub
-				super.onFailure(statusCode, headers, responseString, throwable);
+				super.onFailure(statusCode, headers, throwable, errorResponse);
 			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONObject errorResponse) {
+				// TODO Auto-generated method stub
+				super.onFailure(statusCode, headers, throwable, errorResponse);
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String responseString, final Throwable throwable) {
+				PhotosActivity.this.runOnUiThread(new Runnable(){
+					public void run() {
+						Log.e(getClass().getName(), throwable.getMessage(), throwable);
+						Toast.makeText(PhotosActivity.this.getBaseContext(), "Could not load data. Please check your network connectivity.", Toast.LENGTH_LONG).show();
+					}
+				});
+			}
+			
+			
     	});
     	
 	}
