@@ -19,7 +19,16 @@ import com.squareup.picasso.Transformation;
 
 public class InstagramPhotosAdapter extends ArrayAdapter<InstagramPhoto> {
 	private static final String MAP_SYMBOL_PREFIX = "&raquo; ";
+	
 
+	private static final class ViewHolder {
+		private TextView tvCaption;
+		private ImageView imgPhoto;
+		private ImageView imgProfilePicture;
+		private TextView tvUserName;
+		private TextView tvPhotoLocation;
+	}
+	
 	public InstagramPhotosAdapter(Context context, ArrayList<InstagramPhoto> photos) {
 		super(context, R.layout.item_photo, photos);
 	}
@@ -28,25 +37,31 @@ public class InstagramPhotosAdapter extends ArrayAdapter<InstagramPhoto> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		InstagramPhoto photo = getItem(position);
 		
+		ViewHolder vh;
+		
 		if(convertView == null) {
 			convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_photo, parent, false);
+			vh = new ViewHolder();
+			
+			vh.tvCaption = (TextView) convertView.findViewById(R.id.tvCaption);
+			vh.imgPhoto = (ImageView) convertView.findViewById(R.id.imgPhoto);
+			vh.imgProfilePicture = (ImageView) convertView.findViewById(R.id.imgProfilePicture);
+			vh.tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
+			vh.tvPhotoLocation = (TextView) convertView.findViewById(R.id.tvPhotoLocation);
+			
+			convertView.setTag(vh);
+		} else {
+			vh = (ViewHolder) convertView.getTag();
 		}
 		
-		TextView tvCaption = (TextView) convertView.findViewById(R.id.tvCaption);
-		ImageView imgPhoto = (ImageView) convertView.findViewById(R.id.imgPhoto);
-		
-		tvCaption.setText(Html.fromHtml("&#x2661; " + photo.likesCount + " likes<br/><br/>" + StringUtils.trimToEmpty(photo.caption)));
-		imgPhoto.getLayoutParams().height = photo.imageHeight;
-		imgPhoto.setImageResource(0);// clear any previous image
+		vh.tvCaption.setText(Html.fromHtml("&#x2661; " + photo.likesCount + " likes<br/><br/>" + StringUtils.trimToEmpty(photo.caption)));
+		vh.imgPhoto.getLayoutParams().height = photo.imageHeight;
+		vh.imgPhoto.setImageResource(0);// clear any previous image
 		
 		// Load, decode, resize the photo in async call
-		Picasso.with(getContext()).load(photo.imageUrl).into(imgPhoto);
+		Picasso.with(getContext()).load(photo.imageUrl).into(vh.imgPhoto);
 		
-		final ImageView imgProfilePicture = (ImageView) convertView.findViewById(R.id.imgProfilePicture);
-		TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
-		TextView tvPhotoLocation = (TextView) convertView.findViewById(R.id.tvPhotoLocation);
-		
-		tvPhotoLocation.setText(buildMapLinkText(photo));
+		vh.tvPhotoLocation.setText(buildMapLinkText(photo));
 		
 		Transformation transformation = new Transformation() {
 
@@ -68,9 +83,9 @@ public class InstagramPhotosAdapter extends ArrayAdapter<InstagramPhoto> {
 	        }
 	    };
 		
-		Picasso.with(getContext()).load(photo.profilePicture).transform(transformation).into(imgProfilePicture);
+		Picasso.with(getContext()).load(photo.profilePicture).transform(transformation).into(vh.imgProfilePicture);
 		
-		tvUserName.setText(Html.fromHtml("<b>" + photo.username + "</b>"));
+		vh.tvUserName.setText(Html.fromHtml("<b>" + photo.username + "</b>"));
 		
 		return convertView;
 	}
