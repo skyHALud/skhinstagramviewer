@@ -59,7 +59,7 @@ public class InstagramPhotosAdapter extends ArrayAdapter<InstagramPhoto> {
 		vh.imgPhoto.setImageResource(0);// clear any previous image
 		
 		// Load, decode, resize the photo in async call
-		Picasso.with(getContext()).load(photo.imageUrl).into(vh.imgPhoto);
+		Picasso.with(getContext()).load(photo.imageUrl).fit().centerCrop().into(vh.imgPhoto);
 		
 		vh.tvPhotoLocation.setText(buildMapLinkText(photo));
 		
