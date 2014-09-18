@@ -1,6 +1,10 @@
 package com.codepath.skyhalud.skhinstagramviewer;
 
-public class InstagramPhoto {
+import java.io.Serializable;
+
+public class InstagramPhoto implements Serializable {
+	private static final long serialVersionUID = 1562182148884634710L;
+	
 	public String username;
 	public String profilePicture;
 	public String caption;
