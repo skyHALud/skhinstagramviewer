@@ -49,6 +49,9 @@ public class InstagramPhotosAdapter extends ArrayAdapter<InstagramPhoto> {
 			vh.tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
 			vh.tvPhotoLocation = (TextView) convertView.findViewById(R.id.tvPhotoLocation);
 			
+			vh.imgPhoto.setImageResource(0);
+			vh.imgProfilePicture.setImageResource(0);
+			
 			convertView.setTag(vh);
 		} else {
 			vh = (ViewHolder) convertView.getTag();
