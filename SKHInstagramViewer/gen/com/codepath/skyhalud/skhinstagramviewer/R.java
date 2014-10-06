@@ -47,6 +47,7 @@ public final class R {
         public static final int app_name=0x7f050000;
         public static final int caption_default_text=0x7f050004;
         public static final int hello_world=0x7f050001;
+        public static final int location_text=0x7f050005;
         public static final int popular_photos_caption=0x7f050003;
     }
     public static final class style {
